@@ -41,13 +41,22 @@ func (c *Config) loadAndUpdateConfig(file string, loadFunc func(string) map[stri
 
 // Update adds data
 func (c *Config) Update(data map[string]interface{}) {
-	for key, val := range data {
-		// skip if already set
-		if _, ok := c.data[key]; ok {
+	c.data = merge(c.data, data)
+}
+
+func merge(orig map[string]interface{}, add map[string]interface{}) map[string]interface{} {
+	for key, val := range add {
+		if origVal, ok := orig[key]; ok {
+			origMap, ok := origVal.(map[string]interface{})
+			addMap, ok2 := val.(map[string]interface{})
+			if ok && ok2 {
+				orig[key] = merge(origMap, addMap)
+			}
 			continue
 		}
-		c.data[key] = val
+		orig[key] = val
 	}
+	return orig
 }
 
 // prepareLoadFunc returns func for file format of typ

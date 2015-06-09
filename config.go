@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -52,7 +53,12 @@ func (c *Config) ValueString(keys string) string {
 	if err != nil {
 		return ""
 	}
-	return v.(string)
+	switch t := v.(type) {
+	case string:
+		return t
+	default:
+		return fmt.Sprint(t)
+	}
 }
 
 // ValueStringDefault returns the config value with string type or returns defaut data when missing
