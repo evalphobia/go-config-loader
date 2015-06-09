@@ -1,3 +1,9 @@
+[![Build Status](https://drone.io/github.com/evalphobia/go-config-loader/status.png)](https://drone.io/github.com/evalphobia/go-config-loader/latest)
+
+
+[![Coverage Status](https://coveralls.io/repos/evalphobia/go-config-loader/badge.svg?branch=master)](https://coveralls.io/r/evalphobia/go-config-loader?branch=master)
+
+
 # go-config-loader
 
 `go-config-loader` supports to load config files and convert to map values.
