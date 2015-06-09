@@ -36,6 +36,11 @@ func (c *Config) LoadConfigs(dir string, typ string) error {
 // loadAndUpdateConfig adds data from loaded config to the unified config
 func (c *Config) loadAndUpdateConfig(file string, loadFunc func(string) map[string]interface{}) {
 	data := loadFunc(file)
+	c.Update(data)
+}
+
+// Update adds data
+func (c *Config) Update(data map[string]interface{}) {
 	for key, val := range data {
 		// skip if already set
 		if _, ok := c.data[key]; ok {
@@ -48,6 +53,8 @@ func (c *Config) loadAndUpdateConfig(file string, loadFunc func(string) map[stri
 // prepareLoadFunc returns func for file format of typ
 func prepareLoadFunc(typ string) (func(string) map[string]interface{}, string, error) {
 	switch typ {
+	case "json":
+		return loadJSON, extJSON, nil
 	case "toml":
 		return loadTOML, extTOML, nil
 	default:

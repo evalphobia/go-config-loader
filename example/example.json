@@ -1,0 +1,8 @@
+{
+	"setting": {
+		"userid": 100,
+		"username": "John Doe",
+		"foo": "bar",
+		"isProd": true
+	}
+}

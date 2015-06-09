@@ -6,6 +6,7 @@
 ## Supported format
 
 - toml
+- json
 
 ## Quick Usage
 
