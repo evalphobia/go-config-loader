@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -25,11 +26,13 @@ func (c *Config) GetConfigValues() map[string]interface{} {
 
 // Value returns the config value from key
 func (c *Config) Value(key string) (interface{}, error) {
-	var conf map[string]interface{}
-	conf = c.data
+	if v, ok := GetValueFromEnv(key); ok {
+		return v, nil
+	}
+
 	keys := strings.Split(key, ".")
 	maxIndex := len(keys) - 1
-
+	conf := c.data
 	for i, k := range keys {
 		v, ok := conf[k]
 		if !ok {
@@ -101,6 +104,9 @@ func (c *Config) ValueInt(keys string) int {
 		return int(iv)
 	case float64:
 		return int(iv)
+	case string:
+		i, _ := strconv.Atoi(iv)
+		return i
 	}
 	return 0
 }
@@ -145,6 +151,9 @@ func (c *Config) ValueFloat(keys string) float64 {
 		return float64(iv)
 	case float64:
 		return iv
+	case string:
+		f, _ := strconv.ParseFloat(iv, 64)
+		return f
 	}
 	return 0
 }
@@ -164,5 +173,12 @@ func (c *Config) ValueBool(keys string) bool {
 	if err != nil {
 		return false
 	}
-	return v.(bool)
+	switch iv := v.(type) {
+	case bool:
+		return iv
+	case string:
+		b, _ := strconv.ParseBool(iv)
+		return b
+	}
+	return false
 }
