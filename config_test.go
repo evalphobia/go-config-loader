@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,6 +21,62 @@ func TestNewConfig(t *testing.T) {
 	assert.NotNil(c)
 	assert.NotNil(c.data)
 	assert.Empty(c.data)
+}
+
+func TestSetExpandEnvOn(t *testing.T) {
+	assert := assert.New(t)
+
+	c := NewConfig()
+	assert.False(c.useExpandEnv)
+
+	c.SetExpandEnvOn()
+	assert.True(c.useExpandEnv)
+}
+
+func TestSetExpandEnvOff(t *testing.T) {
+	assert := assert.New(t)
+
+	c := NewConfig()
+	c.useExpandEnv = true
+	assert.True(c.useExpandEnv)
+
+	c.SetExpandEnvOff()
+	assert.False(c.useExpandEnv)
+}
+
+func TestExpandEnv(t *testing.T) {
+	assert := assert.New(t)
+
+	os.Clearenv()
+	defer os.Clearenv()
+	os.Setenv("TEST_STRING", "ENV_TEST_STRING")
+	os.Setenv("test_string", "env_test_string")
+	os.Setenv("TEST_INT", "9")
+	os.Setenv("TEST_BOOL", "true")
+
+	tests := []struct {
+		key   interface{}
+		value interface{}
+	}{
+		{"$TEST_STRING", "ENV_TEST_STRING"},
+		{"$test_string", "env_test_string"},
+		{"$TEST_INT", "9"},
+		{"$TEST_BOOL", "true"},
+		{9, 9},
+		{true, true},
+		{false, false},
+	}
+
+	c := NewConfig()
+	for _, tt := range tests {
+		target := fmt.Sprintf("%+v", tt)
+
+		c.SetExpandEnvOff()
+		assert.Equal(tt.key, c.expandEnv(tt.key), target)
+
+		c.SetExpandEnvOn()
+		assert.Equal(tt.value, c.expandEnv(tt.key), target)
+	}
 }
 
 func TestGetConfigValues(t *testing.T) {
