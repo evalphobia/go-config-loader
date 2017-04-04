@@ -62,7 +62,7 @@ func (c *Config) Value(key string) (interface{}, error) {
 			return nil, errors.New("no data on config, key=" + key)
 		}
 		if i >= maxIndex {
-			return v, nil
+			return c.expandEnv(v), nil
 		}
 
 		data, ok := v.(map[string]interface{})
