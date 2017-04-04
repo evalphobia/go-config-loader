@@ -3,13 +3,15 @@ package config
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
 
 // Config is cofig data struct
 type Config struct {
-	data map[string]interface{}
+	data         map[string]interface{}
+	useExpandEnv bool
 }
 
 // NewConfig creates empty Config struct
@@ -17,6 +19,27 @@ func NewConfig() *Config {
 	return &Config{
 		data: make(map[string]interface{}),
 	}
+}
+
+// SetExpandEnvOn enables to expand env variable in the result value string.
+func (c *Config) SetExpandEnvOn() {
+	c.useExpandEnv = true
+}
+
+// SetExpandEnvOff disables to expand env variable in the result value string.
+func (c *Config) SetExpandEnvOff() {
+	c.useExpandEnv = false
+}
+
+func (c *Config) expandEnv(value interface{}) interface{} {
+	if !c.useExpandEnv {
+		return value
+	}
+
+	if vv, ok := value.(string); ok {
+		return os.ExpandEnv(vv)
+	}
+	return value
 }
 
 // GetConfigValues gets config values
@@ -47,7 +70,7 @@ func (c *Config) Value(key string) (interface{}, error) {
 			conf = data
 		}
 	}
-	return conf[key], nil
+	return c.expandEnv(conf[key]), nil
 }
 
 // ValueString returns the config value with string type
