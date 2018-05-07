@@ -1,7 +1,7 @@
 go-config-loader
 ----
 
-[![GoDoc][1]][2] [![License: MIT][3]][4] [![Release][5]][6] [![Build Status][7]][8] [![Codecov Coverage][11]][12] [![Go Report Card][13]][14] [![Downloads][15]][16]
+[![GoDoc][1]][2] [![License: MIT][3]][4] [![Release][5]][6] [![Build Status][7]][8] [![Codecov Coverage][11]][12] [![Go Report Card][13]][14] [![Code Climate][19]][20] [![BCH compliance][21]][22]
 
 [1]: https://godoc.org/github.com/evalphobia/go-config-loader?status.svg
 [2]: https://godoc.org/github.com/evalphobia/go-config-loader
@@ -21,6 +21,10 @@ go-config-loader
 [16]: https://github.com/evalphobia/go-config-loader/releases
 [17]: https://img.shields.io/github/stars/evalphobia/go-config-loader.svg
 [18]: https://github.com/evalphobia/go-config-loader/stargazers
+[19]: https://codeclimate.com/github/evalphobia/go-config-loader/badges/gpa.svg
+[20]: https://codeclimate.com/github/evalphobia/go-config-loader
+[21]: https://bettercodehub.com/edge/badge/evalphobia/go-config-loader?branch=master
+[22]: https://bettercodehub.com/
 
 `go-config-loader` supports to load config files and convert to map values.
 
